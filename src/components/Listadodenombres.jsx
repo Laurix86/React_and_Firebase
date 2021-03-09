@@ -4,6 +4,8 @@ import uniqid from 'uniqid'
 const Listadodenombres = () =>{
     const [nombre, setNombre] = useState('');
     const [listadenombres, setListadenombres] = useState([]);
+    const [modoEdicion, setModoEdicion] = useState(false);
+    const [id, setId] = useState('');
 
     const addNombre = (event) => {
         event.preventDefault();
@@ -17,8 +19,20 @@ const Listadodenombres = () =>{
     }
 
     const deleteNombre=(id)=>{
-        const nuevoArray = listadenombres.filter(item => item.id != id)
+        const nuevoArray = listadenombres.filter(item => item.id !== id)
         setListadenombres(nuevoArray)
+    }
+
+    const editar = (item) =>{
+        setModoEdicion(true)
+        setNombre(item.tituloNombre);
+        setId(item.id);
+    }
+
+    const editarNombre = (e) =>{
+        e.preventDefault();
+        const NuevoArray = listadenombres.map(item => item.id === id ? {id:item.id, tituloNombre:nombre}: item)
+        setListadenombres(NuevoArray)
     }
 
     return(
@@ -37,6 +51,11 @@ const Listadodenombres = () =>{
                                     onClick={()=> {deleteNombre(item.id)}}
                                     > Borrar
                                     </button>
+                                    <button
+                                    className="btn btn-info float-right"
+                                    onClick={()=> {editar(item)}}
+                                    > Editar
+                                    </button>
                                 </li>
 
                             )
@@ -46,7 +65,7 @@ const Listadodenombres = () =>{
                 </div>
                 <div className='col'>
                     <h2>Formulario para aniadir nombres</h2>
-                    <form onSubmit ={(e)=> addNombre(e)} className='form-group'>
+                    <form onSubmit ={modoEdicion ? editarNombre : addNombre} className='form-group'>
                         <input 
                             onChange={(e)=>(setNombre(e.target.value))} 
                             className='form-control mb-3' type='text' 
@@ -56,7 +75,7 @@ const Listadodenombres = () =>{
                         <input 
                             className='btn btn-info btn-block' 
                             type='submit' 
-                            value='Registrar nombre'
+                            value={modoEdicion ? 'Editar Nombre' : 'Registrar Nombre'}
                         />
                     </form>
                 </div>
