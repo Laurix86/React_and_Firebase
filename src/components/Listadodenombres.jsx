@@ -16,6 +16,11 @@ const Listadodenombres = () =>{
         setNombre('')
     }
 
+    const deleteNombre=(id)=>{
+        const nuevoArray = listadenombres.filter(item => item.id != id)
+        setListadenombres(nuevoArray)
+    }
+
     return(
         <div>
             <h2>Aplicacioon de CRUD basica</h2>
@@ -25,7 +30,14 @@ const Listadodenombres = () =>{
                     <ul className='list-group'>
                         {
                             listadenombres.map( item =>
-                                <li key='item.id'className='list-group-item'>{item.tituloNombre}</li>
+                                <li key={item.id} className='list-group-item'>
+                                    {item.tituloNombre}
+                                    <button
+                                    className="btn btn-danger float-right"
+                                    onClick={()=> {deleteNombre(item.id)}}
+                                    > Borrar
+                                    </button>
+                                </li>
 
                             )
                         }
