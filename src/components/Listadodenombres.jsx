@@ -6,16 +6,21 @@ const Listadodenombres = () =>{
     const [listadenombres, setListadenombres] = useState([]);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [id, setId] = useState('');
+    const [error, setError] = useState(null);
 
     const addNombre = (event) => {
         event.preventDefault();
- 
+        if(!nombre.trim()){
+            setError("El campo nombre esta vacio");
+            return
+        }
         const nuevoNombre ={
             id:uniqid(),
             tituloNombre: nombre
         }
         setListadenombres([...listadenombres, nuevoNombre]);
-        setNombre('')
+        setNombre('');
+        setError(null);
     }
 
     const deleteNombre=(id)=>{
@@ -24,15 +29,23 @@ const Listadodenombres = () =>{
     }
 
     const editar = (item) =>{
-        setModoEdicion(true)
+        setModoEdicion(true);
         setNombre(item.tituloNombre);
         setId(item.id);
+        
     }
 
     const editarNombre = (e) =>{
         e.preventDefault();
+        if(!nombre.trim()){
+            setError("El campo nombre esta vacio");
+            return
+        }
         const NuevoArray = listadenombres.map(item => item.id === id ? {id:item.id, tituloNombre:nombre}: item)
-        setListadenombres(NuevoArray)
+        setListadenombres(NuevoArray);
+        setModoEdicion(false);
+        setNombre("");
+        setError(null);
     }
 
     return(
@@ -78,6 +91,7 @@ const Listadodenombres = () =>{
                             value={modoEdicion ? 'Editar Nombre' : 'Registrar Nombre'}
                         />
                     </form>
+                    {error !== null ? (<div className='alert alert-danger'>{error}</div>) : (<div></div>)}
                 </div>
             </div>
         </div>
